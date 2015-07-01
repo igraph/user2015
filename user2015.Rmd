@@ -1,0 +1,150 @@
+---
+title: "What's new in igraph and networks"
+author: "Gábor Csárdi"
+date: "`r Sys.Date()`"
+output:
+  ioslides_presentation:
+    css: tweaks.css
+    highlight: pygments
+    keep_md: yes
+---
+
+```{r, setup, echo = FALSE, message = FALSE}
+library(knitr)
+library(igraph)
+opts_chunk$set(
+  prompt = FALSE,
+  comment = "#>",
+  tidy = FALSE)
+options(width = 65)
+igraph_options(graph.margin = 0, margin = 0)
+```
+
+## About igraph
+
+<img src="arch.png" width="60%">
+
+## About igraph
+
+* Network analysis library, written mostly in C/C++.
+* Interface to R and Python
+* https://github.com/igraph
+* http://igraph.org
+* Mailing list, stack overflow help.
+* Open GitHub issues for bugs
+
+## What is new?
+
+* New ways to manipulate networks
+* `[` and `[[` operators
+* Better function names, manipulators
+* Pipe friendly
+* New methods:
+    * Graph layout algorithms
+    * New methods for graph clustering
+    * Graphlet decomposition
+    * Embeddings
+    * Graph matching
+    * etc.
+
+## The `[` operator
+
+Imaginary adjacency matrix, queries
+
+```{r echo = FALSE, message = FALSE}
+library(igraph)
+library(igraphdata)
+library(magrittr)
+data(karate)
+data(USairports)
+air <- USairports
+V(air)$state <- gsub("^.*,[ ]*", "", V(air)$City)
+```
+
+```{r}
+air['BOS', 'SFO']
+CA <- c("LAX", "SFO", "SAN", "SMF", "SNA", "BUR", "OAK", "ONT", "SJC")
+air['BOS', CA]
+```
+
+## The `[` operator
+
+Imaginary adjacency matrix, manipulation
+
+Add an edge (and potentially set its weight):
+```{r}
+air["BOS", "ANC"] <- TRUE
+air["BOS", "ANC"]
+```
+
+Remove an edge:
+```{r}
+air["BOS", "ANC"] <- FALSE
+air["BOS", "ANC"]
+```
+
+## The `[[` operator
+
+Imaginary adjacency list, adjacenct vertices:
+
+```{r}
+air[["BOS"]]
+```
+
+## The `[[` operator
+
+Imaginary adjacency list, adjacent vertices:
+
+```{r}
+air[[, "BOS"]]
+```
+
+## Consistent function names
+
+`make_*`, `sample_*`, `cluster_*`, `layout_*`, etc.
+
+## Manipulators for `make_` and `sample_`
+
+```{r}
+ring <- make_(ring(10), with_vertex_(color = "grey", size = 25))
+par(mar=c(0,0,0,0)); plot(ring)
+```
+
+## Manipulators for `make_` and `sample_`
+
+```{r}
+rg <- sample_(degseq(c(2,4,6,8,2,2,2,2)),
+              simplified())
+```
+
+## Manipulators for `layout_`
+
+```{r, fig.width=5}
+g <- make_ring(5) + make_full_graph(5) + make_star(5, mode="undir")
+coords <- layout_(g, in_circle(), component_wise())
+par(mar=c(0,0,0,0)); plot(g)
+```
+
+## Pipe friendly syntax
+
+```{r}
+g <- make_empty_graph(10) %>%
+  add_vertices(5) %>%
+  set_vertex_attr("name", value = LETTERS[1:5]) %>%
+  add_edges(c(1,2,2,3,3,4,4,5,5,1)) %>%
+  set_edge_attr("weight", value = runif(gsize(.)))
+```
+
+## Easier connection to other packages
+
+```{r}
+library(networkD3)
+d3_net <- simpleNetwork(as_data_frame(karate, what = "edges")[, 1:3])
+d3_net
+```
+
+## Current work
+
+* Better connection to other packages and external software
+* Inference
+* Infrastructure cleanup
