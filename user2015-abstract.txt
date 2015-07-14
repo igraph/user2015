@@ -1,0 +1,14 @@
+
+igraph is the premier R package for the analysis
+of network data and it went through major
+restructuring recently and has changed a lot
+since last time it was featured at useR! in 2008.
+
+This talk introduces the new/updated features of igraph:
+- Simplified ways of graph manipulation.
+- New methods community detection.
+- New layouts for graph visualization.
+- New statistical methods: graphlets,
+  embeddings, graph matching, cohesive blocks, etc.
+- How to use igraph graphs with new
+  visualizaion tools: DiagrammeR, D3, etc.
