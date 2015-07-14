@@ -101,7 +101,8 @@ air[[, "BOS"]]
 
 ## Consistent function names
 
-`make_*`, `sample_*`, `cluster_*`, `layout_*`, etc.
+`make_*`, `sample_*`, `cluster_*`, `layout_*`, `graph_from_*`,
+`as_*`, etc.
 
 ## Manipulators for `make_` and `sample_`
 
@@ -145,6 +146,6 @@ d3_net
 
 ## Current work
 
-* Better connection to other packages and external software
+* Better connection to other packages and external software 
 * Inference
 * Infrastructure cleanup
